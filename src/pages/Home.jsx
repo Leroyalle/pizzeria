@@ -8,10 +8,12 @@ import { setActiveCategory, setCurrentPage, setFilters } from '../redux/slices/f
 import { endpoints } from '../api/endpoints';
 import { Sort } from '../components/Sort';
 import { Categories } from '../components/Categories';
+import { categories } from '../components/Categories';
 import { ItemBlock } from '../components/ItemBlock';
 import { Placeholder } from '../components/ItemBlock/Placeholder';
 import { Pagination } from '../components/Pagination';
 import { sortList } from '../components/Sort';
+import { setItems } from '../redux/slices/pizzasSlice';
 export function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,8 +24,8 @@ export function Home() {
   const activeSort = useSelector((state) => state.filter.sort);
   const currentPage = useSelector((state) => state.filter.currentPage);
   const searchValue = useSelector((state) => state.search.searchValue);
+  const items = useSelector((state) => state.pizzas.items);
 
-  const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   // const [currentPage, setCurrentPage] = React.useState(1);
 
@@ -72,10 +74,12 @@ export function Home() {
           const pizzasResponse = await axios.get(
             `${endpoints.pizzas}?${page}&${perPage}&${category}&_sort=${sortBy}&${search}`,
           );
-          setItems(pizzasResponse.data.data);
-          setIsLoading(false);
+          dispatch(setItems(pizzasResponse.data.data));
         } catch (error) {
+          alert('Произошла ошибка при получении данных');
           return error;
+        } finally {
+          setIsLoading(false);
         }
       }
       fetchData();
@@ -93,7 +97,9 @@ export function Home() {
         />
         <Sort />
       </div>
-      <h2 className="content__title">Все пиццы</h2>
+      <h2 className="content__title">
+        {activeCategory === 0 ? 'Все пиццы' : categories[activeCategory]}
+      </h2>
       <div className="content__items">
         {isLoading
           ? [...Array(6)].map((_, index) => <Placeholder key={index} />)

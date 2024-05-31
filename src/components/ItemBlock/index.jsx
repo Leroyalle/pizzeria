@@ -1,9 +1,27 @@
 import React from 'react';
-
-const typesName = ['тонкое', 'традиционное'];
-export const ItemBlock = ({ imageUrl, title, price, types, sizes }) => {
+import { useSelector, useDispatch } from 'react-redux';
+import { addItem } from '../../redux/slices/cartSlice';
+const typeNames = ['тонкое', 'традиционное'];
+const sizeNames = ['26', '30', '40'];
+export const ItemBlock = ({ id, imageUrl, title, price, types, sizes }) => {
+  const cartItem = useSelector((state) => state.cart.items.find((obj) => obj.id === id));
+  const dispatch = useDispatch();
   const [activeType, setActiveType] = React.useState(0);
   const [activeSize, setActiveSize] = React.useState(0);
+
+  const addedCount = cartItem ? cartItem.count : 0;
+  const onClickAdd = () => {
+    const item = {
+      id,
+      imageUrl,
+      title,
+      price,
+      type: typeNames[activeType],
+      size: sizeNames[activeSize],
+    };
+    dispatch(addItem(item));
+  };
+
   return (
     <div className="pizza-block__wrapper">
       <div className="pizza-block">
@@ -17,7 +35,7 @@ export const ItemBlock = ({ imageUrl, title, price, types, sizes }) => {
                   onClick={() => setActiveType(i)}
                   className={activeType === i ? 'active' : ''}
                   key={i}>
-                  {typesName[type]}
+                  {typeNames[type]}
                 </li>
               );
             })}
@@ -37,7 +55,7 @@ export const ItemBlock = ({ imageUrl, title, price, types, sizes }) => {
         </div>
         <div className="pizza-block__bottom">
           <div className="pizza-block__price">от {price} ₽</div>
-          <div className="button button--outline button--add">
+          <div className="button button--outline button--add" onClick={() => onClickAdd()}>
             <svg
               width="12"
               height="12"
@@ -50,7 +68,7 @@ export const ItemBlock = ({ imageUrl, title, price, types, sizes }) => {
               />
             </svg>
             <span>Добавить</span>
-            <i>2</i>
+            {addedCount > 0 && <i>{addedCount}</i>}
           </div>
         </div>
       </div>{' '}

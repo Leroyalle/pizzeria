@@ -44,7 +44,7 @@ export function Sort() {
             fill="#2C2C2C"
           />
         </svg>
-        <b>Сортировка по:</b>
+        <b>Сортировка по: </b>
         <span onClick={() => setPopupIsOpened(!popupIsOpened)}>{sort.name}</span>
       </div>
       {popupIsOpened && (
