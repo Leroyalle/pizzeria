@@ -1,0 +1,25 @@
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 100px 100px 100px;
+  &__title {
+    margin-bottom: 10px;
+    font-weight: 800;
+    font-size: 30px;
+  }
+  &__text {
+    font-size: 22px;
+  }
+  &__reload {
+    width: 230px;
+    margin: 15px auto 0;
+    font-weight: 600;
+    font-size: 20px;
+    background-color: black;
+    &:hover,
+    &:active {
+      background-color: #3d3d3d;
+    }
+  }
+}

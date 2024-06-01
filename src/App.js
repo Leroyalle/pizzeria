@@ -5,6 +5,7 @@ import './scss/app.scss';
 import { Header } from './components/Header';
 import { Home } from './pages/Home';
 import { Cart } from './pages/Cart';
+import { ErrorDisplay } from './components/ErrorDisplay';
 function App() {
   return (
     <div className="wrapper">
@@ -14,6 +15,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="*" element={<ErrorDisplay type={'notFound'} />} />
           </Routes>
         </div>
       </div>

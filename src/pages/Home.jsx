@@ -13,7 +13,9 @@ import { ItemBlock } from '../components/ItemBlock';
 import { Placeholder } from '../components/ItemBlock/Placeholder';
 import { Pagination } from '../components/Pagination';
 import { sortList } from '../components/Sort';
-import { setItems } from '../redux/slices/pizzasSlice';
+import { fetchPizzas } from '../redux/slices/pizzasSlice';
+import { ErrorDisplay } from '../components/ErrorDisplay';
+
 export function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,7 +26,7 @@ export function Home() {
   const activeSort = useSelector((state) => state.filter.sort);
   const currentPage = useSelector((state) => state.filter.currentPage);
   const searchValue = useSelector((state) => state.search.searchValue);
-  const items = useSelector((state) => state.pizzas.items);
+  const { items, status } = useSelector((state) => state.pizzas);
 
   const [isLoading, setIsLoading] = React.useState(true);
   // const [currentPage, setCurrentPage] = React.useState(1);
@@ -66,21 +68,18 @@ export function Home() {
       const sortBy = activeSort.sortProperty;
       const page = `_page=${currentPage}`;
       const perPage = `_per_page=4`;
+      const search = searchValue ? `title=${searchValue}` : '';
 
       async function fetchData() {
-        try {
-          setIsLoading(true);
-          const search = searchValue ? `title=${searchValue}` : '';
-          const pizzasResponse = await axios.get(
-            `${endpoints.pizzas}?${page}&${perPage}&${category}&_sort=${sortBy}&${search}`,
-          );
-          dispatch(setItems(pizzasResponse.data.data));
-        } catch (error) {
-          alert('Произошла ошибка при получении данных');
-          return error;
-        } finally {
-          setIsLoading(false);
-        }
+        dispatch(
+          fetchPizzas({
+            category,
+            sortBy,
+            page,
+            perPage,
+            search,
+          }),
+        );
       }
       fetchData();
     }
@@ -101,9 +100,13 @@ export function Home() {
         {activeCategory === 0 ? 'Все пиццы' : categories[activeCategory]}
       </h2>
       <div className="content__items">
-        {isLoading
-          ? [...Array(6)].map((_, index) => <Placeholder key={index} />)
-          : items.map((item) => <ItemBlock key={item.id} {...item} />)}
+        {status === 'error' ? (
+          <ErrorDisplay />
+        ) : status === 'loading' ? (
+          [...Array(6)].map((_, index) => <Placeholder key={index} />)
+        ) : (
+          items.map((item) => <ItemBlock key={item.id} {...item} />)
+        )}
       </div>
       <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </>
