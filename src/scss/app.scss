@@ -3,6 +3,10 @@
 
 @import 'components/all';
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   background-color: $background;
 }

@@ -1,11 +1,15 @@
 import React from 'react';
-import axios from 'axios';
 import qs from 'qs';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { setActiveCategory, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
-import { endpoints } from '../api/endpoints';
+import {
+  selectFilter,
+  selectSort,
+  setActiveCategory,
+  setCurrentPage,
+  setFilters,
+} from '../redux/slices/filterSlice';
 import { Sort } from '../components/Sort';
 import { Categories } from '../components/Categories';
 import { categories } from '../components/Categories';
@@ -13,7 +17,7 @@ import { ItemBlock } from '../components/ItemBlock';
 import { Placeholder } from '../components/ItemBlock/Placeholder';
 import { Pagination } from '../components/Pagination';
 import { sortList } from '../components/Sort';
-import { fetchPizzas } from '../redux/slices/pizzasSlice';
+import { fetchPizzas, selectPizzas } from '../redux/slices/pizzasSlice';
 import { ErrorDisplay } from '../components/ErrorDisplay';
 
 export function Home() {
@@ -22,14 +26,9 @@ export function Home() {
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
-  const activeCategory = useSelector((state) => state.filter.activeCategory);
-  const activeSort = useSelector((state) => state.filter.sort);
-  const currentPage = useSelector((state) => state.filter.currentPage);
-  const searchValue = useSelector((state) => state.search.searchValue);
-  const { items, status } = useSelector((state) => state.pizzas);
-
-  const [isLoading, setIsLoading] = React.useState(true);
-  // const [currentPage, setCurrentPage] = React.useState(1);
+  const activeSort = useSelector(selectSort);
+  const { searchValue, activeCategory, currentPage } = useSelector(selectFilter);
+  const { items, status } = useSelector(selectPizzas);
 
   const onChangePage = (number) => {
     dispatch(setCurrentPage(number));
