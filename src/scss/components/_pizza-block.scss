@@ -11,6 +11,7 @@
   &__wrapper {
     display: flex;
     justify-content: center;
+    transition: all 150ms ease-in-out;
   }
   &__image {
     width: 260px;
@@ -68,4 +69,9 @@
     line-height: 27px;
     letter-spacing: 0.015em;
   }
+}
+
+.pizza-block__wrapper:has(.pizza-block__header:hover) {
+  transform: translate(-1px, -1px);
+  opacity: 0.9;
 }

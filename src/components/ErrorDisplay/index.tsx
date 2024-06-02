@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './ErrorDisplay.module.scss';
-export function ErrorDisplay({ type }) {
+export const ErrorDisplay: React.FC<{ type: string }> = ({ type }) => {
   const clickReload = () => {
     window.location.reload();
   };
@@ -21,4 +21,4 @@ export function ErrorDisplay({ type }) {
       </button>
     </div>
   );
-}
+};

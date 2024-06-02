@@ -20,7 +20,7 @@ import { sortList } from '../components/Sort';
 import { fetchPizzas, selectPizzas } from '../redux/slices/pizzasSlice';
 import { ErrorDisplay } from '../components/ErrorDisplay';
 
-export function Home() {
+export const Home: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isSearch = React.useRef(false);
@@ -30,8 +30,12 @@ export function Home() {
   const { searchValue, activeCategory, currentPage } = useSelector(selectFilter);
   const { items, status } = useSelector(selectPizzas);
 
-  const onChangePage = (number) => {
-    dispatch(setCurrentPage(number));
+  const onClickCategory = (id: number) => {
+    dispatch(setActiveCategory(id));
+  };
+
+  const onChangePage = (page: number) => {
+    dispatch(setCurrentPage(page));
   };
 
   React.useEffect(() => {
@@ -42,6 +46,7 @@ export function Home() {
       dispatch(
         setFilters({
           ...params,
+          // @ts-ignore
           sort: { name: sortParam.name, sortProperty: sortParam.sortProperty },
         }),
       );
@@ -68,9 +73,10 @@ export function Home() {
       const page = `_page=${currentPage}`;
       const perPage = `_per_page=4`;
       const search = searchValue ? `title=${searchValue}` : '';
-
+      // @ts-ignore
       async function fetchData() {
         dispatch(
+          // @ts-ignore
           fetchPizzas({
             category,
             sortBy,
@@ -89,10 +95,7 @@ export function Home() {
   return (
     <>
       <div className="content__top">
-        <Categories
-          value={activeCategory}
-          onClickCategory={(id) => dispatch(setActiveCategory(id))}
-        />
+        <Categories value={activeCategory} onClickCategory={onClickCategory} />
         <Sort />
       </div>
       <h2 className="content__title">
@@ -100,14 +103,14 @@ export function Home() {
       </h2>
       <div className="content__items">
         {status === 'error' ? (
-          <ErrorDisplay />
+          <ErrorDisplay type={'error'} />
         ) : status === 'loading' ? (
           [...Array(6)].map((_, index) => <Placeholder key={index} />)
         ) : (
-          items.map((item) => <ItemBlock key={item.id} {...item} />)
+          items.map((item: any) => <ItemBlock key={item.id} {...item} />)
         )}
       </div>
       <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </>
   );
-}
+};

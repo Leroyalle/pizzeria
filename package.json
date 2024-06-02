@@ -7,6 +7,10 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.13.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "axios": "^1.6.8",
     "concurrently": "^8.2.2",
     "json-server": "^1.0.0-alpha.23",
@@ -51,7 +55,6 @@
   "homepage": "http://localhost:3000",
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Leroyalle/pizzeria.git"
@@ -60,5 +63,9 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Leroyalle/pizzeria/issues"
+  },
+  "devDependencies": {
+    "@types/lodash.debounce": "^4.0.9",
+    "typescript": "^4.9.5"
   }
 }

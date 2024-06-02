@@ -1,7 +1,13 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectSort, setSort } from '../redux/slices/filterSlice';
-export const sortList = [
+
+type TypeSortItem = {
+  name: string;
+  sortProperty: string;
+};
+
+export const sortList: TypeSortItem[] = [
   { name: 'популярности ↓', sortProperty: 'rating' },
   { name: 'популярности ↑', sortProperty: '-rating' },
   { name: 'цене ↓', sortProperty: 'price' },
@@ -11,22 +17,23 @@ export const sortList = [
 ];
 export function Sort() {
   const dispatch = useDispatch();
-  const sortRef = React.useRef();
+  const sortRef = React.useRef<HTMLDivElement>(null);
 
   const sort = useSelector(selectSort);
-  const [popupIsOpened, setPopupIsOpened] = React.useState(false);
+  const [popupIsOpened, setPopupIsOpened] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    const handleClickOutOfSort = (event) => {
-      if (!event.composedPath().includes(sortRef.current)) {
+    const handleClickOutOfSort = (event: MouseEvent) => {
+      if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
         setPopupIsOpened(false);
       }
     };
+
     document.body.addEventListener('click', handleClickOutOfSort);
     return () => document.body.removeEventListener('click', handleClickOutOfSort);
   }, []);
 
-  const onClickSortFunc = (obj) => {
+  const onClickSortFunc = (obj: TypeSortItem) => {
     dispatch(setSort(obj));
     setPopupIsOpened(false);
   };
@@ -54,7 +61,7 @@ export function Sort() {
               <li
                 onClick={() => onClickSortFunc(item)}
                 key={i}
-                className={sort.sortProperty === item.sortProperty && 'active'}>
+                className={sort.sortProperty === item.sortProperty ? 'active' : ''}>
                 {item.name}
               </li>
             ))}

@@ -3,11 +3,19 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { endpoints } from '../api/endpoints';
 
-export const PageItem = () => {
+export const PageItem: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [item, setItem] = React.useState({});
+  const [item, setItem] = React.useState<{
+    imageUrl: string;
+    title: string;
+    price: number;
+  }>({
+    imageUrl: '',
+    title: '',
+    price: 0,
+  });
 
   React.useEffect(() => {
     const fetchItem = async () => {
@@ -23,14 +31,16 @@ export const PageItem = () => {
   }, []);
 
   if (Object.keys(item).length < 1) {
-    return 'Загрузка..';
+    return <>Загрузка</>;
   }
 
   return (
-    <div className="container">
-      <img src={item.imageUrl} alt="" />
-      <h2>{item.title}</h2>
-      <p>{item.price}</p>
-    </div>
+    <>
+      <div className="container">
+        <img src={item.imageUrl} alt="" />
+        <h2>{item.title}</h2>
+        <p>{item.price}</p>
+      </div>
+    </>
   );
 };

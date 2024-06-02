@@ -1,15 +1,14 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
 
-export const Placeholder = (props) => (
+export const Placeholder = () => (
   <ContentLoader
     speed={2}
     width={280}
     height={500}
     viewBox="0 0 280 500"
     backgroundColor="#f3f3f3"
-    foregroundColor="#ecebeb"
-    {...props}>
+    foregroundColor="#ecebeb">
     <circle cx="138" cy="138" r="138" />
     <rect x="0" y="295" rx="10" ry="10" width="280" height="20" />
     <rect x="1" y="337" rx="10" ry="10" width="274" height="88" />
