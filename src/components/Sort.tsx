@@ -1,19 +1,19 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectSort, setSort } from '../redux/slices/filterSlice';
+import { EnumSortProperty, selectSort, setSort } from '../redux/slices/filterSlice';
 
-type TypeSortItem = {
+export type TypeSort = {
   name: string;
-  sortProperty: string;
+  sortProperty: EnumSortProperty;
 };
 
-export const sortList: TypeSortItem[] = [
-  { name: 'популярности ↓', sortProperty: 'rating' },
-  { name: 'популярности ↑', sortProperty: '-rating' },
-  { name: 'цене ↓', sortProperty: 'price' },
-  { name: 'цене ↑', sortProperty: '-price' },
-  { name: 'алфавиту ↓', sortProperty: 'title' },
-  { name: 'алфавиту ↑', sortProperty: '-title' },
+export const sortList: TypeSort[] = [
+  { name: 'популярности ↓', sortProperty: EnumSortProperty.RATING_DESC },
+  { name: 'популярности ↑', sortProperty: EnumSortProperty.RATING_ASC },
+  { name: 'цене ↓', sortProperty: EnumSortProperty.PRICE_DESC },
+  { name: 'цене ↑', sortProperty: EnumSortProperty.PRICE_ASC },
+  { name: 'алфавиту ↓', sortProperty: EnumSortProperty.TITLE_DESC },
+  { name: 'алфавиту ↑', sortProperty: EnumSortProperty.TITLE_ASC },
 ];
 export function Sort() {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ export function Sort() {
     return () => document.body.removeEventListener('click', handleClickOutOfSort);
   }, []);
 
-  const onClickSortFunc = (obj: TypeSortItem) => {
+  const onClickSortFunc = (obj: TypeSort) => {
     dispatch(setSort(obj));
     setPopupIsOpened(false);
   };

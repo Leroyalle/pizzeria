@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addItem, selectCartItemById } from '../../redux/slices/cartSlice';
+import { addItem, selectCartItemById, TypeCartItem } from '../../redux/slices/cartSlice';
 import { Link } from 'react-router-dom';
 const typeNames = ['тонкое', 'традиционное'];
-const sizeNames = ['26', '30', '40'];
+const sizeNames = [26, 30, 40];
 
 type TypeItemBlock = {
   id: number;
@@ -29,13 +29,14 @@ export const ItemBlock: React.FC<TypeItemBlock> = ({
 
   const addedCount = cartItem ? cartItem.count : 0;
   const onClickAdd = () => {
-    const item = {
+    const item: TypeCartItem = {
       id,
       imageUrl,
       title,
       price,
       type: typeNames[activeType],
       size: sizeNames[activeSize],
+      count: 0,
     };
     dispatch(addItem(item));
   };

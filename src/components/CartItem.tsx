@@ -23,7 +23,7 @@ export const CartItem: React.FC<TypeCartItem> = ({
 }) => {
   const dispatch = useDispatch();
   const onClickPlus = () => {
-    dispatch(addItem({ id }));
+    dispatch(addItem({ id } as TypeCartItem));
   };
   const onClickMinus = () => {
     dispatch(minusItem(id));

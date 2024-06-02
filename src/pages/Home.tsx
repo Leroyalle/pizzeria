@@ -1,6 +1,6 @@
 import React from 'react';
 import qs from 'qs';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -10,18 +10,19 @@ import {
   setCurrentPage,
   setFilters,
 } from '../redux/slices/filterSlice';
-import { Sort } from '../components/Sort';
+import { Sort, TypeSort } from '../components/Sort';
 import { Categories } from '../components/Categories';
 import { categories } from '../components/Categories';
 import { ItemBlock } from '../components/ItemBlock';
 import { Placeholder } from '../components/ItemBlock/Placeholder';
 import { Pagination } from '../components/Pagination';
 import { sortList } from '../components/Sort';
-import { fetchPizzas, selectPizzas } from '../redux/slices/pizzasSlice';
+import { fetchPizzas, selectPizzas, TypeSearchPizzasParams } from '../redux/slices/pizzasSlice';
 import { ErrorDisplay } from '../components/ErrorDisplay';
+import { useAppDispatch } from '../redux/store';
 
 export const Home: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
@@ -38,33 +39,35 @@ export const Home: React.FC = () => {
     dispatch(setCurrentPage(page));
   };
 
-  React.useEffect(() => {
-    if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
-      const sortParam = sortList.find((obj) => obj.sortProperty === params.sortProperty);
+  // React.useEffect(() => {
+  //   if (window.location.search) {
+  //     const params = qs.parse(
+  //       window.location.search.substring(1),
+  //     ) as unknown as TypeSearchPizzasParams;
+  //     const sortParam = sortList.find((obj) => obj.sortProperty === params.sortBy);
+  //     dispatch(
+  //       setFilters({
+  //         searchValue: params.search,
+  //         activeCategory: Number(params.category),
+  //         currentPage: Number(params.page),
+  //         sort: sortParam || sortList[0],
+  //       }),
+  //     );
+  //     isSearch.current = true;
+  //   }
+  // }, []);
 
-      dispatch(
-        setFilters({
-          ...params,
-          // @ts-ignore
-          sort: { name: sortParam.name, sortProperty: sortParam.sortProperty },
-        }),
-      );
-      isSearch.current = true;
-    }
-  }, []);
-
-  React.useEffect(() => {
-    if (isMounted.current) {
-      const queryString = qs.stringify({
-        sortProperty: activeSort.sortProperty,
-        activeCategory,
-        currentPage,
-      });
-      navigate(`?${queryString}`);
-    }
-    isMounted.current = true;
-  }, [activeCategory, activeSort.sortProperty, currentPage]);
+  // React.useEffect(() => {
+  //   if (isMounted.current) {
+  //     const queryString = qs.stringify({
+  //       sortProperty: activeSort.sortProperty,
+  //       activeCategory,
+  //       currentPage,
+  //     });
+  //     navigate(`?${queryString}`);
+  //   }
+  //   isMounted.current = true;
+  // }, [activeCategory, activeSort.sortProperty, currentPage]);
 
   React.useEffect(() => {
     if (!isSearch.current) {
@@ -76,7 +79,6 @@ export const Home: React.FC = () => {
       // @ts-ignore
       async function fetchData() {
         dispatch(
-          // @ts-ignore
           fetchPizzas({
             category,
             sortBy,
