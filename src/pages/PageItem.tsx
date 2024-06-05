@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { endpoints } from '../api/endpoints';
 
-export const PageItem: React.FC = () => {
+const PageItem: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -44,3 +44,5 @@ export const PageItem: React.FC = () => {
     </>
   );
 };
+
+export default PageItem;
